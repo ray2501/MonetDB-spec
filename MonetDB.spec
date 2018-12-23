@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.31.7
+%define version 11.31.11
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -47,7 +47,7 @@ BuildRequires: unixODBC-devel
 # BuildRequires: uriparser-devel
 BuildRequires: zlib-devel
 BuildRequires: python-devel
-BuildRequires: python-numpy-devel
+BuildRequires: python2-numpy-devel
 BuildRequires: R-core-devel
 BuildRequires: libicu-devel
 
@@ -617,7 +617,8 @@ fi
 	--enable-netcdf=no \
 	--enable-odbc=yes \
 	--enable-optimize=yes \
-	--enable-pyintegration=yes \
+	--enable-py2integration=yes \
+	--enable-py3integration=no \
 	--enable-rintegration=yes \
 	--enable-shp=no \
 	--enable-sql=yes \
