@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.31.13
+%define version 11.33.3
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -46,8 +46,8 @@ BuildRequires: readline-devel
 BuildRequires: unixODBC-devel
 # BuildRequires: uriparser-devel
 BuildRequires: zlib-devel
-BuildRequires: python-devel
-BuildRequires: python2-numpy-devel
+BuildRequires: python3-devel >= 3.5
+BuildRequires: python3-numpy-devel
 BuildRequires: R-core-devel
 BuildRequires: libicu-devel
 
@@ -322,29 +322,29 @@ install it.
 %{_libdir}/monetdb5/autoload/*_rapi.mal
 %{_libdir}/monetdb5/lib_rapi.so
 
-%package python2
+%package python3
 Summary: Integration of MonetDB and Python, allowing use of Python from within SQL
 Group: Applications/Databases
 Requires: MonetDB-SQL-server5%{?_isa} = %{version}-%{release}
 
-%description python2
+%description python3
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
 accelerators.  It also has an SQL frontend.
 
 This package contains the interface to use the Python language from
-within SQL queries.  This package is for Python 2.
+within SQL queries.  This package is for Python 3.
 
 NOTE: INSTALLING THIS PACKAGE OPENS UP SECURITY ISSUES.  If you don't
 know how this package affects the security of your system, do not
 install it.
 
-%files python2
+%files python3
 %defattr(-,root,root)
-%{_libdir}/monetdb5/pyapi.*
-%{_libdir}/monetdb5/autoload/*_pyapi.mal
-%{_libdir}/monetdb5/lib_pyapi.so
+%{_libdir}/monetdb5/pyapi3.*
+%{_libdir}/monetdb5/autoload/*_pyapi3.mal
+%{_libdir}/monetdb5/lib_pyapi3.so
 
 %package -n MonetDB5-server
 Summary: MonetDB - Monet Database Management System
@@ -391,7 +391,7 @@ fi
 %dir %{_libdir}/monetdb5
 %dir %{_libdir}/monetdb5/autoload
 %exclude %{_libdir}/monetdb5/geom.mal
-%exclude %{_libdir}/monetdb5/pyapi.mal
+%exclude %{_libdir}/monetdb5/pyapi3.mal
 %exclude %{_libdir}/monetdb5/rapi.mal
 %exclude %{_libdir}/monetdb5/sql*.mal
 %if %{bits} == 64
@@ -399,13 +399,13 @@ fi
 %exclude %{_libdir}/monetdb5/autoload/*_hge.mal
 %endif
 %exclude %{_libdir}/monetdb5/autoload/*_geom.mal
-%exclude %{_libdir}/monetdb5/autoload/*_pyapi.mal
+%exclude %{_libdir}/monetdb5/autoload/*_pyapi3.mal
 %exclude %{_libdir}/monetdb5/autoload/*_rapi.mal
 %{_libdir}/monetdb5/*.mal
 %exclude %{_libdir}/monetdb5/autoload/??_sql*.mal
 %{_libdir}/monetdb5/autoload/*.mal
 %exclude %{_libdir}/monetdb5/lib_geom.so
-%exclude %{_libdir}/monetdb5/lib_pyapi.so
+%exclude %{_libdir}/monetdb5/lib_pyapi3.so
 %exclude %{_libdir}/monetdb5/lib_rapi.so
 %exclude %{_libdir}/monetdb5/lib_sql.so
 %{_libdir}/monetdb5/*.so
@@ -498,7 +498,6 @@ systemd-tmpfiles --create %{_sysconfdir}/tmpfiles.d/monetdbd.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/monetdbd
 %{_libdir}/monetdb5/autoload/??_sql.mal
 %{_libdir}/monetdb5/lib_sql.so
-%{_libdir}/monetdb5/*.sql
 %dir %{_libdir}/monetdb5/createdb
 %exclude %{_libdir}/monetdb5/createdb/*_geom.sql
 %{_libdir}/monetdb5/createdb/*.sql
@@ -617,8 +616,8 @@ fi
 	--enable-netcdf=no \
 	--enable-odbc=yes \
 	--enable-optimize=yes \
-	--enable-py2integration=yes \
-	--enable-py3integration=no \
+	--enable-py2integration=no \
+	--enable-py3integration=yes \
 	--enable-rintegration=yes \
 	--enable-shp=no \
 	--enable-sql=yes \
@@ -637,7 +636,7 @@ fi
 	--with-proj=no \
 	--with-pthread=yes \
 	--with-python2=yes \
-	--with-python3=no \
+	--with-python3=yes \
 	--with-readline=yes \
 	--with-samtools=no \
 	--with-snappy=no \
