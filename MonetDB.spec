@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.33.11
+%define version 11.35.3
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -130,6 +130,7 @@ functionality of MonetDB.
 %defattr(-,root,root)
 %dir %{_includedir}/monetdb
 %{_includedir}/monetdb/gdk*.h
+%{_includedir}/monetdb/matomic.h
 %{_includedir}/monetdb/monet*.h
 %{_libdir}/libbat.so
 %{_libdir}/pkgconfig/monetdb-gdk.pc
@@ -577,8 +578,8 @@ developer, but if you do want to test, this is the package you need.
 %defattr(-,root,root)
 %{_bindir}/Mapprove.py
 %{_bindir}/Mtest.py
-%dir %{python2_sitelib}/MonetDBtesting
-%{python2_sitelib}/MonetDBtesting/*
+%dir %{python3_sitelib}/MonetDBtesting
+%{python3_sitelib}/MonetDBtesting/*
 
 %prep
 %setup -q
