@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.35.19
+%define version 11.37.7
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -159,29 +159,6 @@ MonetDB, you will very likely need this package.
 %doc %{_mandir}/man1/mclient.1.gz
 %doc %{_mandir}/man1/msqldump.1.gz
 
-%package client-tools
-Summary: MonetDB - Monet Database Management System Client Programs
-Group: Applications/Databases
-Requires: %{name}-client%{?_isa} = %{version}-%{release}
-
-%description client-tools
-MonetDB is a database management system that is developed from a
-main-memory perspective with use of a fully decomposed storage model,
-automatic index management, extensibility of data types and search
-accelerators.  It also has an SQL frontend.
-
-This package contains stethoscope, tomograph, and tachograph.  These
-tools can be used to monitor the MonetDB database server.
-
-%files client-tools
-%defattr(-,root,root)
-%{_bindir}/stethoscope
-%{_bindir}/tachograph
-%{_bindir}/tomograph
-%dir %{_datadir}/doc/MonetDB-client-tools
-%docdir %{_datadir}/doc/MonetDB-client-tools
-%{_datadir}/doc/MonetDB-client-tools/*
-
 %package client-devel
 Summary: MonetDB - Monet Database Management System Client Programs
 Group: Development/Libraries/Other
@@ -202,7 +179,7 @@ This package contains the files needed to develop with the
 %defattr(-,root,root)
 %dir %{_includedir}/monetdb
 %{_libdir}/libmapi.so
-%{_includedir}/monetdb/mapi.h
+%{_includedir}/monetdb/mapi*.h
 %{_libdir}/pkgconfig/monetdb-mapi.pc
 
 %package client-odbc
@@ -388,6 +365,7 @@ fi
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5/dbfarm
 %{_bindir}/mserver5
+%exclude %{_bindir}/stethoscope
 %{_libdir}/libmonetdb5.so.*
 %dir %{_libdir}/monetdb5
 %dir %{_libdir}/monetdb5/autoload
@@ -496,6 +474,7 @@ systemd-tmpfiles --create %{_sysconfdir}/tmpfiles.d/monetdbd.conf
 %{_sysconfdir}/tmpfiles.d/monetdbd.conf
 %{_unitdir}/monetdbd.service
 %config(noreplace) %{_localstatedir}/monetdb5/dbfarm/.merovingian_properties
+%verify(not mtime) %attr(664,monetdb,monetdb) %{_localstatedir}/monetdb5/dbfarm/.merovingian_lock
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/monetdbd
 %{_libdir}/monetdb5/autoload/??_sql.mal
 %{_libdir}/monetdb5/lib_sql.so
