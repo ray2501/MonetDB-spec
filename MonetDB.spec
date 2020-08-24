@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.37.7
+%define version 11.37.11
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -41,7 +41,7 @@ BuildRequires: xz-devel
 BuildRequires: libuuid-devel
 BuildRequires: libxml2-devel
 BuildRequires: openssl-devel
-BuildRequires: pcre-devel >= 4.5
+BuildRequires: pcre2-devel
 BuildRequires: readline-devel
 BuildRequires: unixODBC-devel
 # BuildRequires: uriparser-devel
@@ -131,6 +131,8 @@ functionality of MonetDB.
 %dir %{_includedir}/monetdb
 %{_includedir}/monetdb/gdk*.h
 %{_includedir}/monetdb/matomic.h
+%{_includedir}/monetdb/mstring.h
+%exclude %{_includedir}/monetdb/monetdbe.h
 %{_includedir}/monetdb/monet*.h
 %{_libdir}/libbat.so
 %{_libdir}/pkgconfig/monetdb-gdk.pc
