@@ -117,7 +117,7 @@ various other components.
 Summary: MonetDB stream library
 Group: Applications/Databases
 Requires: %{name}-stream%{?_isa} = %{version}-%{release}
-Requires: bzip2-devel
+Requires: libbz2-devel
 Requires: libcurl-devel
 Requires: zlib-devel
 
