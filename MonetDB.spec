@@ -25,9 +25,8 @@ Vendor: MonetDB BV <info@monetdb.org>
 Group: Applications/Databases
 License: MPLv2.0
 URL: http://www.monetdb.org/
-Source: http://dev.monetdb.org/downloads/sources/Aug2018/%{name}-%{version}.tar.xz
+Source: http://dev.monetdb.org/downloads/sources/Oct2020/%{name}-%{version}.tar.xz
 
-BuildRequires: sed
 BuildRequires: systemd
 BuildRequires: bison
 BuildRequires: libbz2-devel
