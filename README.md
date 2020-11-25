@@ -20,4 +20,5 @@ shadow-utils -> pwdutils
 注意： 
 Oct2020 我發現 ODBC driver 使用之前的程式測試，
 無法正確執行，所以目前 MonetDB ODBC driver 推測無法正確運作。
+Oct2020-SP1 已修正 ODBC driver 問題。
 
