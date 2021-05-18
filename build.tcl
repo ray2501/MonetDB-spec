@@ -1,8 +1,8 @@
 #!/usr/bin/tclsh
 
 set arch "x86_64"
-set base "MonetDB-11.39.15"
-set fileurl "https://www.monetdb.org/downloads/sources/Oct2020-SP4/$base.tar.xz"
+set base "MonetDB-11.39.17"
+set fileurl "https://www.monetdb.org/downloads/sources/Oct2020-SP5/$base.tar.xz"
 
 set var [list wget $fileurl -O $base.tar.xz]
 exec >@stdout 2>@stderr {*}$var
