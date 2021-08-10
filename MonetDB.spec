@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.39.17
+%define version 11.41.5
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -86,6 +86,7 @@ functionality of MonetDB.
 %files devel
 %defattr(-,root,root)
 %dir %{_includedir}/monetdb
+%{_includedir}/monetdb/copybinary.h
 %{_includedir}/monetdb/gdk*.h
 %{_includedir}/monetdb/matomic.h
 %{_includedir}/monetdb/mstring.h
@@ -249,6 +250,7 @@ developer.
 %files client-tests
 %defattr(-,root,root)
 %{_bindir}/arraytest
+%{_bindir}/bincopydata
 %{_bindir}/odbcsample1
 %{_bindir}/sample0
 %{_bindir}/sample1
@@ -370,7 +372,6 @@ exit 0
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5/dbfarm
 %{_bindir}/mserver5
-%exclude %{_bindir}/stethoscope
 %{_libdir}/libmonetdb5.so.*
 %{_libdir}/libmonetdbsql.so*
 %dir %{_libdir}/monetdb5
@@ -501,25 +502,23 @@ program that uses MonetDB as an embeddable library.
 %{_includedir}/monetdb/monetdbe.h
 %{_libdir}/pkgconfig/monetdbe.pc
 
-%package testing
-Summary: MonetDB - Monet Database Management System
+%package embedded-tests
+Summary: MonetDBe tests package
 Group: Applications/Databases
+Requires: %{name}-embedded%{?_isa} = %{version}-%{release}
 
-%description testing
+%description embedded-tests
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
-accelerators.  It also has an SQL frontend.
+accelerators.  It also has an SQL front end.
 
-This package contains the programs and files needed for testing the
-MonetDB packages.  You probably don't need this, unless you are a
-developer.  If you do want to test, install %{name}-testing-python.
+This package contains some test programs using the %{name}-embedded
+package.  You probably don't need this, unless you are a developer.
 
-%files testing
-%license COPYING
+%files embedded-tests
 %defattr(-,root,root)
-%{_bindir}/Mdiff
-%{_bindir}/Mlog
+%{_bindir}/example_proxy
 
 %package testing-python
 Summary: MonetDB - Monet Database Management System
@@ -541,8 +540,11 @@ developer, but if you do want to test, this is the package you need.
 
 %files testing-python
 %defattr(-,root,root)
-%{_bindir}/Mapprove.py
+%{_bindir}/Mconvert.py
 %{_bindir}/Mtest.py
+%{_bindir}/Mz.py
+%{_bindir}/mktest.py
+%{_bindir}/sqllogictest.py
 %dir %{python3_sitelib}/MonetDBtesting
 %{python3_sitelib}/MonetDBtesting/*
 
