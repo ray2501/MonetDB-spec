@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.41.13
+%define version 11.43.5
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -463,7 +463,11 @@ This package contains files needed to develop SQL extensions.
 
 %files SQL-server5-devel
 %defattr(-,root,root)
+%{_includedir}/monetdb/exception_buffer.h
+%{_includedir}/monetdb/opt_backend.h
+%{_includedir}/monetdb/rel_*.h
 %{_includedir}/monetdb/sql*.h
+%{_includedir}/monetdb/store_*.h
 
 %package embedded
 Summary: MonetDB as an embedded library
