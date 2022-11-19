@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.43.21
+%define version 11.45.7
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -249,6 +249,9 @@ developer.
 
 %files client-tests
 %defattr(-,root,root)
+%{_bindir}/ODBCStmtAttr
+%{_bindir}/ODBCgetInfo
+%{_bindir}/ODBCmetadata
 %{_bindir}/arraytest
 %{_bindir}/bincopydata
 %{_bindir}/odbcsample1
@@ -259,8 +262,7 @@ developer.
 %{_bindir}/smack00
 %{_bindir}/smack01
 %{_bindir}/streamcat
-%{_bindir}/testgetinfo
-%{_bindir}/testStmtAttr
+%{_bindir}/testcondvar
 %{_bindir}/malsample.pl
 %{_bindir}/sqlsample.php
 %{_bindir}/sqlsample.pl
