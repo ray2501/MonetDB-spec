@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.45.17
+%define version 11.47.3
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -252,6 +252,7 @@ developer.
 %{_bindir}/ODBCStmtAttr
 %{_bindir}/ODBCgetInfo
 %{_bindir}/ODBCmetadata
+%{_bindir}/ODBCtester
 %{_bindir}/arraytest
 %{_bindir}/bincopydata
 %{_bindir}/odbcsample1
