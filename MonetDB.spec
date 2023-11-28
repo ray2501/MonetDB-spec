@@ -40,12 +40,13 @@ BuildRequires: xz-devel
 # BuildRequires: libsphinxclient-devel
 BuildRequires: libuuid-devel
 BuildRequires: libxml2-devel
-BuildRequires: openssl-devel
-BuildRequires: pcre2-devel
+BuildRequires: openssl-devel >= 1.1.1
+BuildRequires: pcre2-devel >= 4.5
 BuildRequires: unixODBC-devel
 BuildRequires: readline-devel
 # BuildRequires: uriparser-devel
 BuildRequires: zlib-devel
+BuildRequires: liblz4-devel >= 1.8
 BuildRequires: python3-devel >= 3.5
 BuildRequires: python3-numpy-devel
 BuildRequires: R-core-devel
@@ -585,7 +586,7 @@ cmake \
 	-DWITH_CMOCKA=OFF \
 	-DWITH_CRYPTO=ON \
 	-DWITH_CURL=ON \
-	-DWITH_LZ4=OFF \
+	-DWITH_LZ4=ON \
 	-DWITH_LZMA=ON \
 	-DWITH_PCRE=ON \
 	-DWITH_PROJ=OFF \
