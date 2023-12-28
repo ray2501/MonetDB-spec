@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.47.17
+%define version 11.49.1
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -40,7 +40,7 @@ BuildRequires: xz-devel
 # BuildRequires: libsphinxclient-devel
 BuildRequires: libuuid-devel
 BuildRequires: libxml2-devel
-BuildRequires: openssl-devel >= 1.1.1
+BuildRequires: libopenssl-3-devel
 BuildRequires: pcre2-devel >= 4.5
 BuildRequires: unixODBC-devel
 BuildRequires: readline-devel
@@ -184,6 +184,7 @@ This package contains the files needed to develop with the
 %dir %{_includedir}/monetdb
 %{_libdir}/libmapi.so
 %{_includedir}/monetdb/mapi*.h
+%{_includedir}/monetdb/msettings.h
 %{_libdir}/pkgconfig/monetdb-mapi.pc
 
 %package client-odbc
@@ -256,6 +257,7 @@ developer.
 %{_bindir}/ODBCtester
 %{_bindir}/arraytest
 %{_bindir}/bincopydata
+%{_bindir}/murltest
 %{_bindir}/odbcsample1
 %{_bindir}/sample0
 %{_bindir}/sample1
@@ -332,11 +334,38 @@ install it.
 %defattr(-,root,root)
 %{_libdir}/monetdb5/lib_pyapi3.so
 
+%package -n MonetDB5-libs
+Summary: MonetDB - Monet Database Main Libraries
+Group: Applications/Databases
+
+%description -n MonetDB5-libs
+MonetDB is a database management system that is developed from a
+main-memory perspective with use of a fully decomposed storage model,
+automatic index management, extensibility of data types and search
+accelerators.  It also has an SQL front end.
+
+This package contains the MonetDB server component in the form of a set
+of libraries.  You need this package if you want to use the MonetDB
+database system, either as independent program (MonetDB5-server) or as
+embedded library (%{name}-embedded).
+
+%ldconfig_scriptlets -n MonetDB5-libs
+
+%files -n MonetDB5-libs
+%defattr(-,root,root)
+%{_libdir}/libmonetdb5.so.*
+%{_libdir}/libmonetdbsql.so*
+%dir %{_libdir}/monetdb5
+%{_libdir}/monetdb5/lib_capi.so
+%{_libdir}/monetdb5/lib_csv.so
+%{_libdir}/monetdb5/lib_generator.so
+
 %package -n MonetDB5-server
 Summary: MonetDB - Monet Database Management System
 Group: Applications/Databases
 Requires(pre): pwdutils
 Requires: %{name}-client%{?_isa} = %{version}-%{release}
+Requires: MonetDB5-libs%{?_isa} = %{version}-%{release}
 
 %description -n MonetDB5-server
 MonetDB is a database management system that is developed from a
@@ -376,12 +405,6 @@ exit 0
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5/dbfarm
 %{_bindir}/mserver5
-%{_libdir}/libmonetdb5.so.*
-%{_libdir}/libmonetdbsql.so*
-%dir %{_libdir}/monetdb5
-%{_libdir}/monetdb5/lib_capi.so
-%{_libdir}/monetdb5/lib_generator.so
-%{_libdir}/monetdb5/lib_udf.so
 %doc %{_mandir}/man1/mserver5.1.gz
 %dir %{_datadir}/doc/MonetDB
 %docdir %{_datadir}/doc/MonetDB
@@ -390,6 +413,7 @@ exit 0
 %package -n MonetDB5-server-devel
 Summary: MonetDB development files
 Group: Development/Libraries/Other
+Requires: MonetDB5-libs%{?_isa} = %{version}-%{release}
 Requires: MonetDB5-server%{?_isa} = %{version}-%{release}
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 
@@ -476,6 +500,7 @@ This package contains files needed to develop SQL extensions.
 %package embedded
 Summary: MonetDB as an embedded library
 Group: Applications/Databases
+Requires: MonetDB5-libs%{?_isa} = %{version}-%{release}
 
 %description embedded
 MonetDB is a database management system that is developed from a
@@ -620,6 +645,7 @@ rm -f %{buildroot}%{_libdir}/monetdb5/run_*.mal
 rm -f %{buildroot}%{_libdir}/monetdb5/lib_run_*.so
 rm -f %{buildroot}%{_libdir}/monetdb5/microbenchmark.mal
 rm -f %{buildroot}%{_libdir}/monetdb5/lib_microbenchmark*.so
+rm -f %{buildroot}%{_libdir}/monetdb5/lib_udf*.so
 rm -f %{buildroot}%{_bindir}/monetdb_mtest.sh
 rm -rf %{buildroot}%{_datadir}/monetdb # /cmake
 
