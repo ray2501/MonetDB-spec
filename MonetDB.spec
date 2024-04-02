@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.49.1
+%define version 11.49.5
 
 # groups of related archs
 %define all_x86 i386 i586 i686
