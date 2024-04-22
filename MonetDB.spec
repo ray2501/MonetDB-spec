@@ -1,5 +1,5 @@
 %define name MonetDB
-%define version 11.49.5
+%define version 11.49.7
 
 # groups of related archs
 %define all_x86 i386 i586 i686
@@ -49,7 +49,6 @@ BuildRequires: zlib-devel
 BuildRequires: liblz4-devel >= 1.8
 BuildRequires: python3-devel >= 3.5
 BuildRequires: python3-numpy-devel
-BuildRequires: R-core-devel
 BuildRequires: libicu-devel
 
 %description
@@ -288,29 +287,6 @@ extensions for %{name}-SQL-server5.
 %files geom-MonetDB5
 %defattr(-,root,root)
 %{_libdir}/monetdb5/lib_geom.so
-
-%package R
-Summary: Integration of MonetDB and R, allowing use of R from within SQL
-Group: Applications/Databases
-Requires: MonetDB-SQL-server5%{?_isa} = %{version}-%{release}
-
-%description R
-MonetDB is a database management system that is developed from a
-main-memory perspective with use of a fully decomposed storage model,
-automatic index management, extensibility of data types and search
-accelerators.  It also has an SQL frontend.
-
-This package contains the interface to use the R language from within
-SQL queries.
-
-NOTE: INSTALLING THIS PACKAGE OPENS UP SECURITY ISSUES.  If you don't
-know how this package affects the security of your system, do not
-install it.
-
-%files R
-%defattr(-,root,root)
-%{_libdir}/monetdb5/rapi.R
-%{_libdir}/monetdb5/lib_rapi.so
 
 %package python3
 Summary: Integration of MonetDB and Python, allowing use of Python from within SQL
@@ -602,7 +578,7 @@ cmake \
 	-DNETCDF=OFF \
 	-DODBC=ON \
 	-DPY3INTEGRATION=ON \
-	-DRINTEGRATION=ON \
+	-DRINTEGRATION=OFF \
 	-DSANITIZER=OFF \
 	-DSHP=OFF \
 	-DSTRICT=OFF \
