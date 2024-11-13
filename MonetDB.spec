@@ -9,7 +9,7 @@
 # Copyright 1997 - July 2008 CWI.
 
 %global name MonetDB
-%global version 11.49.11
+%global version 11.51.5
 
 
 # This package contains monetdbd which is a (long running) daemon, so
@@ -78,7 +78,7 @@ more client packages.
 %files
 %license COPYING
 %defattr(-,root,root)
-%{_libdir}/libbat.so.*
+%{_libdir}/libbat*.so.*
 
 %package devel
 Summary: MonetDB development files
@@ -104,7 +104,7 @@ functionality of MonetDB.
 %{_includedir}/monetdb/mstring.h
 %exclude %{_includedir}/monetdb/monetdbe.h
 %{_includedir}/monetdb/monet*.h
-%{_libdir}/libbat.so
+%{_libdir}/libbat*.so
 %{_libdir}/pkgconfig/monetdb-gdk.pc
 
 %package stream
@@ -125,7 +125,7 @@ various other components.
 %files stream
 %license COPYING
 %defattr(-,root,root)
-%{_libdir}/libstream.so.*
+%{_libdir}/libstream*.so.*
 
 %package stream-devel
 Summary: MonetDB stream library
@@ -147,7 +147,7 @@ library.
 %files stream-devel
 %defattr(-,root,root)
 %dir %{_includedir}/monetdb
-%{_libdir}/libstream.so
+%{_libdir}/libstream*.so
 %{_includedir}/monetdb/stream.h
 %{_includedir}/monetdb/stream_socket.h
 %{_libdir}/pkgconfig/monetdb-stream.pc
@@ -171,7 +171,7 @@ you will very likely need this package.
 %files client-lib
 %license COPYING
 %defattr(-,root,root)
-%{_libdir}/libmapi.so.*
+%{_libdir}/libmapi*.so.*
 
 %package client
 Summary: MonetDB - Monet Database Management System Client Programs
@@ -192,8 +192,8 @@ MonetDB, you will very likely need this package.
 %files client
 %license COPYING
 %defattr(-,root,root)
-%{_bindir}/mclient
-%{_bindir}/msqldump
+%{_bindir}/mclient*
+%{_bindir}/msqldump*
 %{_mandir}/man1/mclient.1*
 %{_mandir}/man1/msqldump.1*
 
@@ -215,7 +215,7 @@ This package contains the files needed to develop with the
 %files client-devel
 %defattr(-,root,root)
 %dir %{_includedir}/monetdb
-%{_libdir}/libmapi.so
+%{_libdir}/libmapi*.so
 %{_includedir}/monetdb/mapi*.h
 %{_includedir}/monetdb/msettings.h
 %{_libdir}/pkgconfig/monetdb-mapi.pc
@@ -285,6 +285,7 @@ developer.
 %{_bindir}/arraytest
 %{_bindir}/bincopydata
 %{_bindir}/murltest
+%{_bindir}/odbcconnect
 %{_bindir}/odbcsample1
 %{_bindir}/sample0
 %{_bindir}/sample1
@@ -315,7 +316,7 @@ extensions for MonetDB5-server.
 
 %files geom-MonetDB5
 %defattr(-,root,root)
-%{_libdir}/monetdb5/lib_geom.so
+%{_libdir}/monetdb5*/lib_geom.so
 
 
 %package python3
@@ -339,7 +340,7 @@ install it.
 
 %files python3
 %defattr(-,root,root)
-%{_libdir}/monetdb5/lib_pyapi3.so
+%{_libdir}/monetdb5*/lib_pyapi3.so
 
 
 %package -n MonetDB5-libs
@@ -361,12 +362,12 @@ embedded library (%{name}-embedded).
 
 %files -n MonetDB5-libs
 %defattr(-,root,root)
-%{_libdir}/libmonetdb5.so.*
-%{_libdir}/libmonetdbsql.so*
-%dir %{_libdir}/monetdb5
-%{_libdir}/monetdb5/lib_capi.so
-%{_libdir}/monetdb5/lib_csv.so
-%{_libdir}/monetdb5/lib_generator.so
+%{_libdir}/libmonetdb5*.so.*
+%{_libdir}/libmonetdbsql*.so*
+%dir %{_libdir}/monetdb5-%{version}
+%{_libdir}/monetdb5*/lib_capi.so
+%{_libdir}/monetdb5*/lib_csv.so
+%{_libdir}/monetdb5*/lib_generator.so
 
 %package -n MonetDB5-server
 Summary: MonetDB - Monet Database Management System
@@ -415,7 +416,7 @@ exit 0
 %attr(2750,monetdb,monetdb) %dir %{_localstatedir}/lib/monetdb
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5/dbfarm
-%{_bindir}/mserver5
+%{_bindir}/mserver5*
 %{_mandir}/man1/mserver5.1*
 %dir %{_datadir}/doc/MonetDB
 %docdir %{_datadir}/doc/MonetDB
@@ -440,7 +441,7 @@ used from the MAL level.
 %defattr(-,root,root)
 %{_includedir}/monetdb/mal*.h
 %{_includedir}/monetdb/mel.h
-%{_libdir}/libmonetdb5.so
+%{_libdir}/libmonetdb5*.so
 %{_libdir}/pkgconfig/monetdb5.pc
 
 %package SQL-server5
@@ -470,8 +471,8 @@ configuration.
 
 %files SQL-server5
 %defattr(-,root,root)
-%{_bindir}/monetdb
-%{_bindir}/monetdbd
+%{_bindir}/monetdb*
+%{_bindir}/monetdbd*
 %dir %attr(775,monetdb,monetdb) %{_localstatedir}/log/monetdb
 %dir %attr(775,monetdb,monetdb) %{_rundir}/monetdb
 # RHEL >= 7, and all current Fedora
@@ -502,7 +503,6 @@ This package contains files needed to develop SQL extensions.
 
 %files SQL-server5-devel
 %defattr(-,root,root)
-%{_includedir}/monetdb/exception_buffer.h
 %{_includedir}/monetdb/opt_backend.h
 %{_includedir}/monetdb/rel_*.h
 %{_includedir}/monetdb/sql*.h
@@ -654,9 +654,9 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/log/monetdb
 install -d -m 0775 %{buildroot}%{_rundir}/monetdb
 
 # remove unwanted stuff
-rm -f %{buildroot}%{_libdir}/monetdb5/lib_opt_sql_append.so
-rm -f %{buildroot}%{_libdir}/monetdb5/lib_microbenchmark*.so
-rm -f %{buildroot}%{_libdir}/monetdb5/lib_udf*.so
+rm -f %{buildroot}%{_libdir}/monetdb5*/lib_opt_sql_append.so
+rm -f %{buildroot}%{_libdir}/monetdb5*/lib_microbenchmark*.so
+rm -f %{buildroot}%{_libdir}/monetdb5*/lib_udf*.so
 rm -f %{buildroot}%{_bindir}/monetdb_mtest.sh
 rm -rf %{buildroot}%{_datadir}/monetdb # /cmake
 
