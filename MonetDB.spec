@@ -9,7 +9,7 @@
 # Copyright 1997 - July 2008 CWI.
 
 %global name MonetDB
-%global version 11.51.5
+%global version 11.51.7
 
 
 # This package contains monetdbd which is a (long running) daemon, so
