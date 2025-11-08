@@ -35,7 +35,6 @@ BuildRequires: cmake >= 3.12
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: bison
-BuildRequires: python3-devel
 BuildRequires: libbz2-devel
 BuildRequires: unixODBC-devel
 BuildRequires: readline-devel
@@ -50,9 +49,6 @@ BuildRequires: pkgconfig(openssl) >= 1.1.1
 BuildRequires: pkgconfig(libpcre) >= 4.5
 BuildRequires: pkgconfig(zlib)
 BuildRequires: pkgconfig(liblz4) >= 1.8
-BuildRequires: pkgconfig(python3) >= 3.5
-# cannot use python3dist(numpy) because of CentOS 7
-BuildRequires: python3-numpy
 # optional packages:
 # BuildRequires: pkgconfig(cmocka)      # -DWITH_CMOCKA=ON
 # BuildRequires: pkgconfig(gdal)        # -DSHP=ON
@@ -319,30 +315,6 @@ extensions for MonetDB5-server.
 %{_libdir}/monetdb5*/lib_geom.so
 
 
-%package python3
-Summary: Integration of MonetDB and Python, allowing use of Python from within SQL
-Group: Applications/Databases
-Requires: MonetDB5-server%{?_isa} = %{version}-%{release}
-Requires: python3-numpy
-
-%description python3
-MonetDB is a database management system that is developed from a
-main-memory perspective with use of a fully decomposed storage model,
-automatic index management, extensibility of data types and search
-accelerators.  It also has an SQL front end.
-
-This package contains the interface to use the Python language from
-within SQL queries.  This package is for Python 3.
-
-NOTE: INSTALLING THIS PACKAGE OPENS UP SECURITY ISSUES.  If you don't
-know how this package affects the security of your system, do not
-install it.
-
-%files python3
-%defattr(-,root,root)
-%{_libdir}/monetdb5*/lib_pyapi3.so
-
-
 %package -n MonetDB5-libs
 Summary: MonetDB - Monet Database Main Libraries
 Group: Applications/Databases
@@ -567,33 +539,6 @@ package.  You probably don't need this, unless you are a developer.
 %defattr(-,root,root)
 %{_bindir}/example_proxy
 
-%package testing-python
-Summary: MonetDB - Monet Database Management System
-Group: Applications/Databases
-Requires: %{name}-client-tests = %{version}-%{release}
-Requires: python3dist(pymonetdb)
-BuildArch: noarch
-
-%description testing-python
-MonetDB is a database management system that is developed from a
-main-memory perspective with use of a fully decomposed storage model,
-automatic index management, extensibility of data types and search
-accelerators.  It also has an SQL front end.
-
-This package contains the Python programs and files needed for testing
-the MonetDB packages.  You probably don't need this, unless you are a
-developer, but if you do want to test, this is the package you need.
-
-%files testing-python
-%defattr(-,root,root)
-%{_bindir}/Mconvert.py
-%{_bindir}/Mtest.py
-%{_bindir}/Mz.py
-%{_bindir}/mktest.py
-%{_bindir}/sqllogictest.py
-%dir %{python3_sitelib}/MonetDBtesting
-%{python3_sitelib}/MonetDBtesting/*
-
 %prep
 %setup -q
 
@@ -612,7 +557,7 @@ cmake .. \
         -DINT128=ON \
         -DNETCDF=OFF \
         -DODBC=ON \
-        -DPY3INTEGRATION=ON \
+        -DPY3INTEGRATION=OFF \
         -DRINTEGRATION=OFF \
         -DSANITIZER=OFF \
         -DSHP=OFF \
@@ -658,6 +603,12 @@ rm -f %{buildroot}%{_libdir}/monetdb5*/lib_opt_sql_append.so
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_microbenchmark*.so
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_udf*.so
 rm -f %{buildroot}%{_bindir}/monetdb_mtest.sh
+rm -f %{buildroot}%{_bindir}/Mconvert.py
+rm -f %{buildroot}%{_bindir}/Mtest.py
+rm -f %{buildroot}%{_bindir}/Mz.py
+rm -f %{buildroot}%{_bindir}/mktest.py
+rm -f %{buildroot}%{_bindir}/sqllogictest.py
+rm -rf %{buildroot}%{python3_sitelib}/MonetDBtesting
 rm -rf %{buildroot}%{_datadir}/monetdb # /cmake
 
 %changelog
