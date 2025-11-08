@@ -4,12 +4,12 @@
 # License, v. 2.0.  If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright 2024 MonetDB Foundation;
+# Copyright 2024, 2025 MonetDB Foundation;
 # Copyright August 2008 - 2023 MonetDB B.V.;
 # Copyright 1997 - July 2008 CWI.
 
 %global name MonetDB
-%global version 11.51.7
+%global version 11.53.13
 
 
 # This package contains monetdbd which is a (long running) daemon, so
@@ -26,7 +26,7 @@ Group: Applications/Databases
 License: MPL-2.0
 URL: https://www.monetdb.org/
 BugURL: https://github.com/MonetDB/MonetDB/issues
-Source: https://www.monetdb.org/downloads/sources/Dec2023-SP4/%{name}-%{version}.tar.xz
+Source: https://www.monetdb.org/downloads/sources/Mar2025-SP2/MonetDB-%{version}.tar.xz
 
 
 BuildRequires: systemd-rpm-macros
@@ -46,7 +46,7 @@ BuildRequires: pkgconfig(libcurl)
 BuildRequires: pkgconfig(liblzma)
 BuildRequires: pkgconfig(libxml-2.0)
 BuildRequires: pkgconfig(openssl) >= 1.1.1
-BuildRequires: pkgconfig(libpcre) >= 4.5
+BuildRequires: pkgconfig(libpcre2-8)
 BuildRequires: pkgconfig(zlib)
 BuildRequires: pkgconfig(liblz4) >= 1.8
 # optional packages:
@@ -65,8 +65,8 @@ accelerators.  It also has an SQL front end.
 
 This package contains the core components of MonetDB in the form of a
 single shared library.  If you want to use MonetDB, you will certainly
-need this package, but you will also need at least the MonetDB5-server
-package, and most likely also %{name}-SQL-server5, as well as one or
+need this package, but you will also need at least the %{name}-server
+package, and most likely also %{name}-SQL, as well as one or
 more client packages.
 
 %ldconfig_scriptlets
@@ -102,6 +102,53 @@ functionality of MonetDB.
 %{_includedir}/monetdb/monet*.h
 %{_libdir}/libbat*.so
 %{_libdir}/pkgconfig/monetdb-gdk.pc
+%dir %{_datadir}/monetdb
+%dir %{_datadir}/monetdb/cmake
+%{_datadir}/monetdb/cmake/gdkTargets*.cmake
+%{_datadir}/monetdb/cmake/matomicTargets.cmake
+%{_datadir}/monetdb/cmake/mstringTargets.cmake
+%{_datadir}/monetdb/cmake/monetdb_config_headerTargets.cmake
+
+%package mutils
+Summary: MonetDB mutils library
+Group: Applications/Databases
+
+%description mutils
+MonetDB is a database management system that is developed from a
+main-memory perspective with use of a fully decomposed storage model,
+automatic index management, extensibility of data types and search
+accelerators.  It also has an SQL front end.
+
+This package contains a shared library (libmutils) which is needed by
+various other components.
+
+%ldconfig_scriptlets mutils
+
+%files mutils
+%license COPYING
+%defattr(-,root,root)
+%{_libdir}/libmutils*.so.*
+
+%package mutils-devel
+Summary: MonetDB mutils library
+Group: Applications/Databases
+Requires: %{name}-mutils%{?_isa} = %{version}-%{release}
+
+%description mutils-devel
+MonetDB is a database management system that is developed from a
+main-memory perspective with use of a fully decomposed storage model,
+automatic index management, extensibility of data types and search
+accelerators.  It also has an SQL front end.
+
+This package contains the files to develop with the %{name}-mutils
+library.
+
+%files mutils-devel
+%defattr(-,root,root)
+%dir %{_includedir}/monetdb
+%{_libdir}/libmutils*.so
+%{_libdir}/pkgconfig/monetdb-mutils.pc
+%{_datadir}/monetdb/cmake/mutilsTargets*.cmake
 
 %package stream
 Summary: MonetDB stream library
@@ -127,6 +174,7 @@ various other components.
 Summary: MonetDB stream library
 Group: Applications/Databases
 Requires: %{name}-stream%{?_isa} = %{version}-%{release}
+Requires: %{name}-mutils-devel%{?_isa} = %{version}-%{release}
 Requires: libbz2-devel
 Requires: libcurl-devel
 Requires: zlib-devel
@@ -147,6 +195,7 @@ library.
 %{_includedir}/monetdb/stream.h
 %{_includedir}/monetdb/stream_socket.h
 %{_libdir}/pkgconfig/monetdb-stream.pc
+%{_datadir}/monetdb/cmake/streamTargets*.cmake
 
 %package client-lib
 Summary: MonetDB - Monet Database Management System Client Programs
@@ -215,6 +264,7 @@ This package contains the files needed to develop with the
 %{_includedir}/monetdb/mapi*.h
 %{_includedir}/monetdb/msettings.h
 %{_libdir}/pkgconfig/monetdb-mapi.pc
+%{_datadir}/monetdb/cmake/mapiTargets*.cmake
 
 %package client-odbc
 Summary: MonetDB ODBC driver
@@ -258,7 +308,7 @@ fi
 %package client-tests
 Summary: MonetDB Client tests package
 Group: Applications/Databases
-Requires: MonetDB5-server%{?_isa} = %{version}-%{release}
+Requires: %{name}-server%{?_isa} = %{version}-%{release}
 Requires: %{name}-client%{?_isa} = %{version}-%{release}
 Requires: %{name}-client-odbc%{?_isa} = %{version}-%{release}
 
@@ -296,30 +346,36 @@ developer.
 %{_bindir}/sqlsample.pl
 
 
-%package geom-MonetDB5
-Summary: MonetDB5 SQL GIS support module
+%package geom
+Summary: SQL GIS support module for MonetDB
 Group: Applications/Databases
-Requires: MonetDB5-server%{?_isa} = %{version}-%{release}
+Requires: %{name}-server%{?_isa} = %{version}-%{release}
+Obsoletes: MonetDB-geom-MonetDB5 < 11.50.0
+Provides: %{name}-geom-MonetDB5 = %{version}-%{release}
+Provides: %{name}-geom-MonetDB5%{?_isa} = %{version}-%{release}
 
-%description geom-MonetDB5
+%description geom
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
 accelerators.  It also has an SQL front end.
 
 This package contains the GIS (Geographic Information System)
-extensions for MonetDB5-server.
+extensions for %{name}-server.
 
-%files geom-MonetDB5
+%files geom
 %defattr(-,root,root)
 %{_libdir}/monetdb5*/lib_geom.so
 
 
-%package -n MonetDB5-libs
+%package libs
 Summary: MonetDB - Monet Database Main Libraries
 Group: Applications/Databases
+Obsoletes: MonetDB5-libs < 11.50.0
+Provides: MonetDB5-libs = %{version}-%{release}
+Provides: MonetDB5-libs%{?_isa} = %{version}-%{release}
 
-%description -n MonetDB5-libs
+%description libs
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
@@ -327,12 +383,12 @@ accelerators.  It also has an SQL front end.
 
 This package contains the MonetDB server component in the form of a set
 of libraries.  You need this package if you want to use the MonetDB
-database system, either as independent program (MonetDB5-server) or as
+database system, either as independent program (%{name}-server) or as
 embedded library (%{name}-embedded).
 
-%ldconfig_scriptlets -n MonetDB5-libs
+%ldconfig_scriptlets libs
 
-%files -n MonetDB5-libs
+%files libs
 %defattr(-,root,root)
 %{_libdir}/libmonetdb5*.so.*
 %{_libdir}/libmonetdbsql*.so*
@@ -340,19 +396,42 @@ embedded library (%{name}-embedded).
 %{_libdir}/monetdb5*/lib_capi.so
 %{_libdir}/monetdb5*/lib_csv.so
 %{_libdir}/monetdb5*/lib_generator.so
+%{_libdir}/monetdb5*/lib_monetdb_loader.so
 
-%package -n MonetDB5-server
+%package odbc-loader
+Summary: MonetDB ODBC loader module
+Group: Applications/Databases
+Requires: %{name}-server%{?_isa} = %{version}-%{release}
+
+%description odbc-loader
+MonetDB is a database management system that is developed from a
+main-memory perspective with use of a fully decomposed storage model,
+automatic index management, extensibility of data types and search
+accelerators.  It also has an SQL front end.
+
+This package provides an interface to the MonetDB server through which
+data from remote databases can be loaded through an ODBC interface.  In
+order to use this module, mserver5 needs to be run with the option
+--loadmodule odbc_loader.
+
+%files odbc-loader
+%defattr(-,root,root)
+%{_libdir}/monetdb5*/lib_odbc_loader.so
+
+%package server
 Summary: MonetDB - Monet Database Management System
 Group: Applications/Databases
 Requires(pre): shadow
 Requires: %{name}-client%{?_isa} = %{version}-%{release}
-Requires: MonetDB5-libs%{?_isa} = %{version}-%{release}
-Obsoletes: MonetDB5-server-hugeint < 11.38.0
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+Obsoletes: MonetDB5-server < 11.50.0
+Provides: MonetDB5-server = %{version}-%{release}
+Provides: MonetDB5-server%{?_isa} = %{version}-%{release}
 Requires(pre): systemd
 Provides:       group(monetdb)
 Provides:       user(monetdb)
 
-%description -n MonetDB5-server
+%description server
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
@@ -361,9 +440,9 @@ accelerators.  It also has an SQL front end.
 This package contains the MonetDB server component.  You need this
 package if you want to use the MonetDB database system.  If you want to
 use the monetdb and monetdbd programs to manage your databases
-(recommended), you also need %{name}-SQL-server5.
+(recommended), you also need %{name}-SQL.
 
-%pre -n MonetDB5-server
+%pre server
 
 getent group monetdb >/dev/null || groupadd --system monetdb
 if getent passwd monetdb >/dev/null; then
@@ -383,7 +462,7 @@ else
 fi
 exit 0
 
-%files -n MonetDB5-server
+%files server
 %defattr(-,root,root)
 %attr(2750,monetdb,monetdb) %dir %{_localstatedir}/lib/monetdb
 %attr(2770,monetdb,monetdb) %dir %{_localstatedir}/monetdb5
@@ -394,13 +473,16 @@ exit 0
 %docdir %{_datadir}/doc/MonetDB
 %{_datadir}/doc/MonetDB/*
 
-%package -n MonetDB5-server-devel
+%package server-devel
 Summary: MonetDB development files
 Group: Applications/Databases
-Requires: MonetDB5-libs%{?_isa} = %{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
+Obsoletes: MonetDB5-server-devel < 11.50.0
+Provides: MonetDB5-server-devel = %{version}-%{release}
+Provides: MonetDB5-server-devel%{?_isa} = %{version}-%{release}
 
-%description -n MonetDB5-server-devel
+%description server-devel
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
@@ -409,21 +491,24 @@ accelerators.  It also has an SQL front end.
 This package contains files needed to develop extensions that can be
 used from the MAL level.
 
-%files -n MonetDB5-server-devel
+%files server-devel
 %defattr(-,root,root)
 %{_includedir}/monetdb/mal*.h
 %{_includedir}/monetdb/mel.h
 %{_libdir}/libmonetdb5*.so
 %{_libdir}/pkgconfig/monetdb5.pc
+%{_datadir}/monetdb/cmake/monetdb5Targets*.cmake
 
-%package SQL-server5
-Summary: MonetDB5 SQL server modules
+%package SQL
+Summary: MonetDB SQL server modules
 Group: Applications/Databases
-Requires(pre): MonetDB5-server%{?_isa} = %{version}-%{release}
-Obsoletes: %{name}-SQL-server5-hugeint < 11.38.0
+Requires(pre): %{name}-server%{?_isa} = %{version}-%{release}
+Obsoletes: MonetDB-SQL-server5 < 11.50.0
+Provides: %{name}-SQL-server5 = %{version}-%{release}
+Provides: %{name}-SQL-server5%{?_isa} = %{version}-%{release}
 %{?systemd_requires}
 
-%description SQL-server5
+%description SQL
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
@@ -432,16 +517,16 @@ accelerators.  It also has an SQL front end.
 This package contains the monetdb and monetdbd programs and the systemd
 configuration.
 
-%post SQL-server5
+%post SQL
 %systemd_post monetdbd.service
 
-%preun SQL-server5
+%preun SQL
 %systemd_preun monetdbd.service
 
-%postun SQL-server5
+%postun SQL
 %systemd_postun_with_restart monetdbd.service
 
-%files SQL-server5
+%files SQL
 %defattr(-,root,root)
 %{_bindir}/monetdb*
 %{_bindir}/monetdbd*
@@ -459,13 +544,17 @@ configuration.
 %docdir %{_datadir}/doc/MonetDB-SQL
 %{_datadir}/doc/MonetDB-SQL/*
 
-%package SQL-server5-devel
-Summary: MonetDB5 SQL server modules
+%package SQL-devel
+Summary: MonetDB SQL server modules development files
 Group: Applications/Databases
-Requires: %{name}-SQL-server5%{?_isa} = %{version}-%{release}
-Requires: MonetDB5-server-devel%{?_isa} = %{version}-%{release}
+Requires: %{name}-SQL%{?_isa} = %{version}-%{release}
+Requires: %{name}-server-devel%{?_isa} = %{version}-%{release}
+Requires: %{name}-embedded-devel%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-SQL-server5-devel < 11.50.0
+Provides: %{name}-SQL-server5-devel = %{version}-%{release}
+Provides: %{name}-SQL-server5-devel%{?_isa} = %{version}-%{release}
 
-%description SQL-server5-devel
+%description SQL-devel
 MonetDB is a database management system that is developed from a
 main-memory perspective with use of a fully decomposed storage model,
 automatic index management, extensibility of data types and search
@@ -473,17 +562,19 @@ accelerators.  It also has an SQL front end.
 
 This package contains files needed to develop SQL extensions.
 
-%files SQL-server5-devel
+%files SQL-devel
 %defattr(-,root,root)
 %{_includedir}/monetdb/opt_backend.h
 %{_includedir}/monetdb/rel_*.h
 %{_includedir}/monetdb/sql*.h
 %{_includedir}/monetdb/store_*.h
+%{_datadir}/monetdb/cmake/MonetDBConfig*.cmake
+%{_datadir}/monetdb/cmake/sqlTargets*.cmake
 
 %package embedded
 Summary: MonetDB as an embedded library
 Group: Applications/Databases
-Requires: MonetDB5-libs%{?_isa} = %{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 %description embedded
 MonetDB is a database management system that is developed from a
@@ -520,6 +611,7 @@ program that uses MonetDB as an embeddable library.
 %{_libdir}/libmonetdbe.so
 %{_includedir}/monetdb/monetdbe.h
 %{_libdir}/pkgconfig/monetdbe.pc
+%{_datadir}/monetdb/cmake/monetdbeTargets*.cmake
 
 %package embedded-tests
 Summary: MonetDBe tests package
@@ -546,6 +638,7 @@ package.  You probably don't need this, unless you are a developer.
 mkdir build
 cd build
 cmake .. \
+	-DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DDESTDIR=%{buildroot} \
         -DCMAKE_INSTALL_RUNSTATEDIR=/run \
@@ -572,6 +665,8 @@ cmake .. \
         -DWITH_PCRE=ON \
         -DWITH_PROJ=OFF \
         -DWITH_READLINE=ON \
+        -DWITH_RTREE=OFF \
+        -DWITH_SQLPARSE=OFF \
         -DWITH_VALGRIND=OFF \
         -DWITH_XML2=ON \
         -DWITH_ZLIB=ON
@@ -609,7 +704,6 @@ rm -f %{buildroot}%{_bindir}/Mz.py
 rm -f %{buildroot}%{_bindir}/mktest.py
 rm -f %{buildroot}%{_bindir}/sqllogictest.py
 rm -rf %{buildroot}%{python3_sitelib}/MonetDBtesting
-rm -rf %{buildroot}%{_datadir}/monetdb # /cmake
 
 %changelog
 
