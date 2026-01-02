@@ -9,7 +9,7 @@
 # Copyright 1997 - July 2008 CWI.
 
 %global name MonetDB
-%global version 11.53.13
+%global version 11.55.1
 
 
 # This package contains monetdbd which is a (long running) daemon, so
@@ -26,7 +26,7 @@ Group: Applications/Databases
 License: MPL-2.0
 URL: https://www.monetdb.org/
 BugURL: https://github.com/MonetDB/MonetDB/issues
-Source: https://www.monetdb.org/downloads/sources/Mar2025-SP2/MonetDB-%{version}.tar.xz
+Source: https://www.monetdb.org/downloads/sources/Dec2025/MonetDB-%{version}.tar.xz
 
 
 BuildRequires: systemd-rpm-macros
@@ -324,26 +324,27 @@ developer.
 
 %files client-tests
 %defattr(-,root,root)
-%{_bindir}/ODBCStmtAttr
-%{_bindir}/ODBCgetInfo
-%{_bindir}/ODBCmetadata
-%{_bindir}/ODBCtester
 %{_bindir}/arraytest
+%{_bindir}/backrefencode
 %{_bindir}/bincopydata
+%{_bindir}/malsample.pl
 %{_bindir}/murltest
 %{_bindir}/odbcconnect
+%{_bindir}/ODBCgetInfo
+%{_bindir}/ODBCmetadata
 %{_bindir}/odbcsample1
+%{_bindir}/ODBCStmtAttr
+%{_bindir}/ODBCtester
 %{_bindir}/sample0
 %{_bindir}/sample1
 %{_bindir}/sample4
 %{_bindir}/shutdowntest
 %{_bindir}/smack00
 %{_bindir}/smack01
-%{_bindir}/streamcat
-%{_bindir}/testcondvar
-%{_bindir}/malsample.pl
 %{_bindir}/sqlsample.php
 %{_bindir}/sqlsample.pl
+%{_bindir}/streamcat
+%{_bindir}/testcondvar
 
 
 %package geom
