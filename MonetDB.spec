@@ -9,7 +9,7 @@
 # Copyright 1997 - July 2008 CWI.
 
 %global name MonetDB
-%global version 11.55.1
+%global version 11.55.3
 
 
 # This package contains monetdbd which is a (long running) daemon, so
@@ -630,7 +630,7 @@ package.  You probably don't need this, unless you are a developer.
 
 %files embedded-tests
 %defattr(-,root,root)
-%{_bindir}/example_proxy
+%{_bindir}/example*
 
 %prep
 %setup -q
@@ -695,6 +695,7 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/log/monetdb
 install -d -m 0775 %{buildroot}%{_rundir}/monetdb
 
 # remove unwanted stuff
+rm -f %{buildroot}%{_bindir}/demo*
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_opt_sql_append.so
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_microbenchmark*.so
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_udf*.so

@@ -1,10 +1,10 @@
 #!/usr/bin/tclsh
 
 set arch "x86_64"
-set base "MonetDB-11.55.1"
-set fileurl "https://www.monetdb.org/downloads/sources/Dec2025/MonetDB-11.55.1.tar.xz"
+set base "MonetDB-11.55.3"
+set fileurl "https://www.monetdb.org/downloads/sources/Dec2025-SP1/MonetDB-11.55.3.tar.xz"
 
-set var [list wget2 $fileurl -O $base.tar.xz]
+set var [list curl -L $fileurl -o $base.tar.xz]
 exec >@stdout 2>@stderr {*}$var
 
 if {[file exists build]} {
