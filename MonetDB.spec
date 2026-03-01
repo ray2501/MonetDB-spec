@@ -26,7 +26,7 @@ Group: Applications/Databases
 License: MPL-2.0
 URL: https://www.monetdb.org/
 BugURL: https://github.com/MonetDB/MonetDB/issues
-Source: https://www.monetdb.org/downloads/sources/Dec2025/MonetDB-%{version}.tar.xz
+Source: https://www.monetdb.org/downloads/sources/Dec2025-SP1/MonetDB-%{version}.tar.xz
 
 
 BuildRequires: systemd-rpm-macros
@@ -630,10 +630,25 @@ package.  You probably don't need this, unless you are a developer.
 
 %files embedded-tests
 %defattr(-,root,root)
-%{_bindir}/example*
+%{_bindir}/demo_oob_read
+%{_bindir}/demo_oob_write
+%{_bindir}/example1
+%{_bindir}/example2
+%{_bindir}/example_append
+%{_bindir}/example_append_raw
+%{_bindir}/example_backup
+%{_bindir}/example_blob
+%{_bindir}/example_connections
+%{_bindir}/example_copy
+%{_bindir}/example_decimals
+%{_bindir}/example_proxy
+%{_bindir}/example_sessions
+%{_bindir}/example_temporal
+%{_bindir}/demo_oob_read
+%{_bindir}/demo_oob_write
 
 %prep
-%setup -q
+%setup -q -n MonetDB-%{version}
 
 %build
 mkdir build
@@ -695,7 +710,6 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/log/monetdb
 install -d -m 0775 %{buildroot}%{_rundir}/monetdb
 
 # remove unwanted stuff
-rm -f %{buildroot}%{_bindir}/demo*
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_opt_sql_append.so
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_microbenchmark*.so
 rm -f %{buildroot}%{_libdir}/monetdb5*/lib_udf*.so
