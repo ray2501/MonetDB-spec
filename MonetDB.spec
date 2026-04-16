@@ -2,14 +2,12 @@
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0.  If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-# Copyright 2024, 2025 MonetDB Foundation;
-# Copyright August 2008 - 2023 MonetDB B.V.;
-# Copyright 1997 - July 2008 CWI.
+# For copyright information, see the file debian/copyright.
 
 %global name MonetDB
-%global version 11.55.3
+%global version 11.55.5
 
 
 # This package contains monetdbd which is a (long running) daemon, so
@@ -26,7 +24,7 @@ Group: Applications/Databases
 License: MPL-2.0
 URL: https://www.monetdb.org/
 BugURL: https://github.com/MonetDB/MonetDB/issues
-Source: https://www.monetdb.org/downloads/sources/Dec2025-SP1/MonetDB-%{version}.tar.xz
+Source: https://www.monetdb.org/downloads/sources/Dec2025-SP2/MonetDB-%{version}.tar.xz
 
 
 BuildRequires: systemd-rpm-macros
@@ -72,7 +70,7 @@ more client packages.
 %ldconfig_scriptlets
 
 %files
-%license COPYING
+%license LICENSE
 %defattr(-,root,root)
 %{_libdir}/libbat*.so.*
 
@@ -125,7 +123,7 @@ various other components.
 %ldconfig_scriptlets mutils
 
 %files mutils
-%license COPYING
+%license LICENSE
 %defattr(-,root,root)
 %{_libdir}/libmutils*.so.*
 
@@ -166,7 +164,7 @@ various other components.
 %ldconfig_scriptlets stream
 
 %files stream
-%license COPYING
+%license LICENSE
 %defattr(-,root,root)
 %{_libdir}/libstream*.so.*
 
@@ -214,7 +212,7 @@ you will very likely need this package.
 %ldconfig_scriptlets client-lib
 
 %files client-lib
-%license COPYING
+%license LICENSE
 %defattr(-,root,root)
 %{_libdir}/libmapi*.so.*
 
@@ -235,7 +233,7 @@ SQL database so that it can be loaded back later.  If you want to use
 MonetDB, you will very likely need this package.
 
 %files client
-%license COPYING
+%license LICENSE
 %defattr(-,root,root)
 %{_bindir}/mclient*
 %{_bindir}/msqldump*
@@ -284,7 +282,7 @@ This package contains the MonetDB ODBC driver.
 %post client-odbc
 # install driver if first install of package or if driver not installed yet
 if [ "$1" -eq 1 ] || ! odbcinst -d -q -n MonetDB >& /dev/null; then
-odbcinst -i -d -r <<EOF
+    odbcinst -i -d -r <<\EOF
 [MonetDB]
 Description = ODBC for MonetDB
 Driver = %{_exec_prefix}/lib/libMonetODBC.so
@@ -296,11 +294,11 @@ fi
 
 %postun client-odbc
 if [ "$1" -eq 0 ]; then
-odbcinst -u -d -n MonetDB
+    odbcinst -u -d -n MonetDB
 fi
 
 %files client-odbc
-%license COPYING
+%license LICENSE
 %defattr(-,root,root)
 %{_libdir}/libMonetODBC.so
 %{_libdir}/libMonetODBCs.so
@@ -533,7 +531,6 @@ configuration.
 %{_bindir}/monetdbd*
 %dir %attr(775,monetdb,monetdb) %{_localstatedir}/log/monetdb
 %dir %attr(775,monetdb,monetdb) %{_rundir}/monetdb
-# RHEL >= 7, and all current Fedora
 %{_tmpfilesdir}/monetdbd.conf
 %{_unitdir}/monetdbd.service
 %config(noreplace) %attr(664,monetdb,monetdb) %{_localstatedir}/monetdb5/dbfarm/.merovingian_properties
@@ -644,8 +641,6 @@ package.  You probably don't need this, unless you are a developer.
 %{_bindir}/example_proxy
 %{_bindir}/example_sessions
 %{_bindir}/example_temporal
-%{_bindir}/demo_oob_read
-%{_bindir}/demo_oob_write
 
 %prep
 %setup -q -n MonetDB-%{version}
